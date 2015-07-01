@@ -1,0 +1,4219 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+<head>
+    <meta content="en-us" http-equiv="Content-Language" />
+    <meta content="text/html; charset=utf-16" http-equiv="Content-Type" />
+    <title _locid="PortabilityAnalysis0">.NET Portability Report</title>
+    <style>
+        /* Body style, for the entire document */
+        body {
+            background: #F3F3F4;
+            color: #1E1E1F;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Header1 style, used for the main title */
+        h1 {
+            padding: 10px 0px 10px 10px;
+            font-size: 21pt;
+            background-color: #E2E2E2;
+            border-bottom: 1px #C1C1C2 solid;
+            color: #201F20;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        /* Header2 style, used for "Overview" and other sections */
+        h2 {
+            font-size: 18pt;
+            font-weight: normal;
+            padding: 15px 0 5px 0;
+            margin: 0;
+        }
+
+        /* Header3 style, used for sub-sections, such as project name */
+        h3 {
+            font-weight: normal;
+            font-size: 15pt;
+            margin: 0;
+            padding: 15px 0 5px 0;
+            background-color: transparent;
+        }
+
+        h4 {
+            font-weight: normal;
+            font-size: 12pt;
+            margin: 0;
+            padding: 0 0 0 0;
+            background-color: transparent;
+        }
+
+        /* Color all hyperlinks one color */
+        a {
+            color: #1382CE;
+        }
+
+        /* Paragraph text (for longer informational messages) */
+        p {
+            font-size: 10pt;
+        }
+
+        /* Table styles */
+        table {
+            border-spacing: 0 0;
+            border-collapse: collapse;
+            font-size: 10pt;
+        }
+
+            table th {
+                background: #E7E7E8;
+                text-align: left;
+                text-decoration: none;
+                font-weight: normal;
+                padding: 3px 6px 3px 6px;
+            }
+
+            table td {
+                vertical-align: top;
+                padding: 3px 6px 5px 5px;
+                margin: 0px;
+                border: 1px solid #E7E7E8;
+                background: #F7F7F8;
+            }
+
+        .NoBreakingChanges {
+            color: darkgreen;
+            font-weight:bold;
+        }
+
+        .FewBreakingChanges {
+            color: orange;
+            font-weight:bold;
+        }
+
+        .ManyBreakingChanges {
+            color: red;
+            font-weight:bold;
+        }
+
+        .BreakDetails {
+            margin-left: 30px;
+        }
+
+        .CompatMessage {
+            font-style: italic;
+            font-size: 10pt;
+        }
+
+        .GoodMessage {
+            color: darkgreen;
+        }
+
+        /* Local link is a style for hyperlinks that link to file:/// content, there are lots so color them as 'normal' text until the user mouse overs */
+        .localLink {
+            color: #1E1E1F;
+            background: #EEEEED;
+            text-decoration: none;
+        }
+
+            .localLink:hover {
+                color: #1382CE;
+                background: #FFFF99;
+                text-decoration: none;
+            }
+
+        /* Center text, used in the over views cells that contain message level counts */
+        .textCentered {
+            text-align: center;
+        }
+
+        /* The message cells in message tables should take up all avaliable space */
+        .messageCell {
+            width: 100%;
+        }
+
+        /* Padding around the content after the h1 */
+        #content {
+            padding: 0px 12px 12px 12px;
+        }
+
+        /* The overview table expands to width, with a max width of 97% */
+        #overview table {
+            width: auto;
+            max-width: 75%;
+        }
+
+        /* The messages tables are always 97% width */
+        #messages table {
+            width: 97%;
+        }
+
+        /* All Icons */
+        .IconSuccessEncoded, .IconInfoEncoded, .IconWarningEncoded, .IconErrorEncoded {
+            min-width: 18px;
+            min-height: 18px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* Success icon encoded */
+        .IconSuccessEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconSuccess#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPElEQVR4Xp1Tv0vDUBi8FqeA4NpBcBLcWnQSApncOnTo4FSnjP0DsnXpH5CxiwbHDg4Zuj4oOEXiJgiC4FDcCkLWmIMc1Pfw+eMgQ77v3Xf3Pe51YKGqqisAEwCR1TIAsiAIblSo6xrdHeJR85Xle3mdmCQKb0PsfqyxxzM8K15HZADl/H5+sHpZwYfxyRjTs+kWwKBx8yoHd2mRiuzF8mkJniWH/13u3Fjrs/EdhsdDFHGB/DLXEJBDLh1MWPAhPo1BLB4WX5yQywHR+m3tVe/t97D52CB/ziG0nIgD/qDuYg8WuCcVZ2YGwlJ3YDugkpR/VNcAEx6GEKhERSr71FuO4YCM4XBdwKvecjIlkSnsO0Hyp/GxSeJAdzBKzpOtnPwyyiPdAZhpZptT04tU+zk7s8czeges//s5C5+CwqrR4/gw+AAAAABJRU5ErkJggg==);
+        }
+
+        /* Information icon encoded */
+        .IconInfoEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconInformation#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVR4Xs2TsUoDQRRF7wwoziokjZUKadInhdhukR9YP8DMX1hYW+QvdsXa/QHBbcXC7W0CamWTQnclFutceIQJwwaWNLlwm5k5d94M76mmaeCrrmsLYOocY12FcxZFUeozCqKqqgYA8uevv1H6VuPxcwlfk5N92KHBxfFeCSAxxswlYAW/Xr989x/mv9gkhtyMDhcAxgzRsp7flj8B/HF1RsMXq+NZMkopaHe7lbKxQUEIGbKsYNoGn969060hZBkQex/W8oRQwsQaW2o3Ago2SVcJUzAgY3N0lTCZZm+zPS8HB51gMmS1DEYyOz9acKO1D8JWTlafKIMxdhvlfdyT94Vv5h7P8Ky7nQzACmhvKq3zk3PjW9asz9D/1oigecsioooAAAAASUVORK5CYII=);
+        }
+
+        /* Warning icon encoded */
+        .IconWarningEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconWarning#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAx0lEQVR4XpWSMQ7CMAxFf4xAyBMLCxMrO8dhaBcuwdCJS3RJBw7SA/QGTCxdWJgiQYWKXJWKIXHIlyw5lqr34tQgEOdcBsCOx5yZK3hCCKdYXneQkh4pEfqzLfu+wVDSyyzFoJjfz9NB+pAF+eizx2Vruts0k15mPgvS6GYvpVtQhB61IB/dk6AF6fS4Ben0uIX5odtFe8Q/eW1KvFeH4e8khT6+gm5B+t3juyDt7n0jpe+CANTd+oTUjN/U3yVaABnSUjFz/gFq44JaVSCXeQAAAABJRU5ErkJggg==);
+        }
+
+        /* Error icon encoded */
+        .IconErrorEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconError#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQElEQVR4XqWTvUoEQRCE6wYPZUA80AfwAQz23uCMjA7MDRQEIzPBVEyNTQUFIw00vcQTTMzuAh/AxEQQT8HF/3G/oGGnEUGuoNnd6qoZuqltyKEsyzVJq5I6rnUp6SjGeGhESikzzlc1eL7opfuVbrqbU1Zw9NCgtQMaZpY0eNnaaL2fHusvTK5vKu7sjSS1Y4y3QUA6K3e3Mau5UFDyMP7tYF9o8cAHZv68vipoIJg971PZIZ5HiwdvYGGvFVFHmGmZ2MxwmQYPXubPl9Up0tfoMQGetXd6mRbvhBw+boZ6WF7Mbv1+GsHRk0fQmPAH1GfmZirbCfDJ61tw3Px8/8pZsPAG4jlVhcPgZ7adwNWBB68lkRQWFiTgFlbnLY3DGGM7izIJIyT/jjIvEJw6fdJTc6krDzh6aMwMP9bvDH4ADSsa9uSWVJkAAAAASUVORK5CYII=);
+        }
+    </style>
+</head>
+<body>
+    <h1 _locid="PortabilityReport">.NET Portability Report</h1>
+    <div id="content">
+        <div id="submissionId" style="font-size:8pt;">
+            <p>
+                <i>
+                    Submission Id&nbsp;
+                    f38306fc-0bdf-47b9-aaa8-9975bd255c42
+
+                    
+                    
+                </i>
+            </p>
+        </div>
+        <h2 _locid="SummaryTitle">
+            <a name="Portability Summary"></a>Portability Summary
+        </h2>
+        <div id="summary">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Assembly</th>
+                            <th>ASP.NET 5,Version=v1.0</th>
+                            <th>Windows,Version=v8.1</th>
+                            <th>.NET Framework,Version=v4.6</th>
+                            <th>Windows Phone,Version=v8.1</th>
+                    </tr>
+
+                    
+                        <tr>
+                            <td><strong><a href="#MindFusion.Scheduling.Reporting">MindFusion.Scheduling.Reporting</a></strong></td>
+                                <td class="text-center">61.15 %</td>
+                                <td class="text-center">58.40 %</td>
+                                <td class="text-center">100.00 %</td>
+                                <td class="text-center">58.40 %</td>
+                        </tr>
+                                    </tbody>
+            </table>
+        </div>
+        <div id="details">
+                <a name="MindFusion.Scheduling.Reporting"><h3>MindFusion.Scheduling.Reporting</h3></a>
+                <table>
+                    <tbody>
+                        <tr>
+                                <th>Target type</th>
+                                <th>ASP.NET 5,Version=v1.0</th>
+                                <th>Windows,Version=v8.1</th>
+                                <th>.NET Framework,Version=v4.6</th>
+                                <th>Windows Phone,Version=v8.1</th>
+                                <th>Recommended changes</th>
+                        </tr>
+                        
+                            <tr>
+                                    <td>System.AppDomain</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Remove usage</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">add_ResourceResolve(System.ResolveEventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_CurrentDomain</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Remove usage</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Collections.CollectionBase</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Count</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_List</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetEnumerator</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">OnInsertComplete(System.Int32,System.Object)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Collections.Comparer</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Default</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Compare(System.Object,System.Object)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ComponentModel.ComponentResourceManager</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Type)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ComponentModel.Container</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ComponentModel.IContainer</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Bitmap</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Int32,System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Brush</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Color</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Empty</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">FromArgb(System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">FromArgb(System.Int32,System.Int32,System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">FromArgb(System.Int32,System.Int32,System.Int32,System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_A</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_B</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Black</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_G</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_LightGoldenrodYellow</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Magenta</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_R</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_White</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_WhiteSmoke</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">op_Inequality(System.Drawing.Color,System.Drawing.Color)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.ColorBlend</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Colors</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Positions</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.CombineMode</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.CompositingMode</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.CompositingQuality</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.CoordinateSpace</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.DashStyle</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.FillMode</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.FlushIntention</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.GraphicsContainer</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.GraphicsPath</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.GraphicsState</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.HatchBrush</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_BackgroundColor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_ForegroundColor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.InterpolationMode</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.LinearGradientBrush</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_InterpolationColors</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_LinearColors</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Rectangle</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Transform</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.Matrix</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_OffsetX</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_OffsetY</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TransformVectors(System.Drawing.PointF[])</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.MatrixOrder</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.PathGradientBrush</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_CenterColor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_InterpolationColors</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_SurroundColors</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.PixelOffsetMode</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Drawing2D.SmoothingMode</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Font</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.String,System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.String,System.Single,System.Drawing.FontStyle)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Bold</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Italic</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Name</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_SizeInPoints</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Underline</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.FontStyle</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Graphics</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Dispose</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">FromImage(System.Drawing.Image)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Clip</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_DpiX</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_DpiY</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_PageUnit</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Transform</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ResetTransform</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Restore(System.Drawing.Drawing2D.GraphicsState)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Save</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Clip(System.Drawing.Region)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_PageUnit(System.Drawing.GraphicsUnit)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Transform(System.Drawing.Drawing2D.Matrix)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TransformPoints(System.Drawing.Drawing2D.CoordinateSpace,System.Drawing.Drawing2D.CoordinateSpace,System.Drawing.Point[])</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TransformPoints(System.Drawing.Drawing2D.CoordinateSpace,System.Drawing.Drawing2D.CoordinateSpace,System.Drawing.PointF[])</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TranslateTransform(System.Single,System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TranslateTransform(System.Single,System.Single,System.Drawing.Drawing2D.MatrixOrder)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.GraphicsUnit</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Icon</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Image</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Dispose</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Height</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Width</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Imaging.ImageAttributes</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Pen</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Brush</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Color</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_DashStyle</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Width</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Point</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Empty</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Int32,System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_X</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Y</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.PointF</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Single,System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_X</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Y</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Printing.Margins</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Int32,System.Int32,System.Int32,System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Clone</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Bottom</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Left</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Right</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Top</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Printing.PageSettings</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Bounds</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Margins</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Landscape(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Margins(System.Drawing.Printing.Margins)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Printing.PrintDocument</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">add_BeginPrint(System.Drawing.Printing.PrintEventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">add_EndPrint(System.Drawing.Printing.PrintEventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">add_PrintPage(System.Drawing.Printing.PrintPageEventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_DefaultPageSettings</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_DocumentName</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Print</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">remove_BeginPrint(System.Drawing.Printing.PrintEventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">remove_EndPrint(System.Drawing.Printing.PrintEventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">remove_PrintPage(System.Drawing.Printing.PrintPageEventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_DocumentName(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Printing.PrintEventArgs</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Printing.PrintEventHandler</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Object,System.IntPtr)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Printing.PrintPageEventArgs</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Graphics</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_MarginBounds</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_HasMorePages(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Printing.PrintPageEventHandler</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Object,System.IntPtr)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Rectangle</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Int32,System.Int32,System.Int32,System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Bottom</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Height</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Right</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Width</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_X</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Y</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Inflate(System.Int32,System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Height(System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Width(System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.RectangleF</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Empty</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Drawing.PointF,System.Drawing.SizeF)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Single,System.Single,System.Single,System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Bottom</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Height</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Left</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Right</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Size</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Top</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Width</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_X</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Y</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Inflate(System.Single,System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Height(System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Width(System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_X(System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Y(System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Region</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Size</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Int32,System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.SizeF</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Empty</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Single,System.Single)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Height</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Width</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.SolidBrush</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Color</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.StringAlignment</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.StringFormat</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Alignment</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_FormatFlags</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_GenericDefault</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_LineAlignment</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.StringFormatFlags</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.SystemColors</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_MenuBar</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Drawing.Text.TextRenderingHint</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.IO.FileAccess</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.IO.FileMode</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.IO.FileStream</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.String,System.IO.FileMode,System.IO.FileAccess)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Reflection.Assembly</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>typeof(CurrentType).GetTypeInfo().Assembly</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetExecutingAssembly</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>typeof(CurrentType).GetTypeInfo().Assembly</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Load(System.Byte[])</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ResolveEventArgs</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use AssemblyLoadContext</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Name</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use AssemblyLoadContext</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ResolveEventHandler</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use AssemblyLoadContext</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Object,System.IntPtr)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use AssemblyLoadContext</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Resources.ResourceManager</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Can now only get strings.  Use manifest resources for other types of objects</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetObject(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Can now only get strings.  Use manifest resources for other types of objects</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Runtime.CompilerServices.SuppressIldasmAttribute</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.DESCryptoServiceProvider</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.ICryptoTransform</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TransformFinalBlock(System.Byte[],System.Int32,System.Int32)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.SymmetricAlgorithm</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">CreateDecryptor</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_IV(System.Byte[])</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Key(System.Byte[])</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.String</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Intern(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Type</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Assembly</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>.GetTypeInfo().Assembly</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetProperty(System.String)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.BorderStyle</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.CheckState</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.CommonDialog</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ShowDialog</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.Control</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Controls</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">PerformLayout</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ResumeLayout(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Dock(System.Windows.Forms.DockStyle)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Location(System.Drawing.Point)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_MinimumSize(System.Drawing.Size)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Name(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Size(System.Drawing.Size)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_TabIndex(System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Text(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">SuspendLayout</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.Control.ControlCollection</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Add(System.Windows.Forms.Control)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.DialogResult</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.DockStyle</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.Form</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Dispose(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">OnLoad(System.EventArgs)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_AutoScaleBaseSize(System.Drawing.Size)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_ClientSize(System.Drawing.Size)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ShowDialog</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.HorizontalAlignment</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ImageList</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.ComponentModel.IContainer)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Images</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_ImageStream(System.Windows.Forms.ImageListStreamer)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_TransparentColor(System.Drawing.Color)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ImageList.ImageCollection</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">SetKeyName(System.Int32,System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ImageListStreamer</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.PrintDialog</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Document</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_AllowPrintToFile(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Document(System.Drawing.Printing.PrintDocument)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.PrintPreviewControl</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Document</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_StartPage</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_UseAntiAlias</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">InvalidatePreview</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_AutoZoom(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Columns(System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Document(System.Drawing.Printing.PrintDocument)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Rows(System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_StartPage(System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_UseAntiAlias(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Zoom(System.Double)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStrip</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Items</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_ImageList(System.Windows.Forms.ImageList)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripButton</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Checked(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripDropDownItem</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_DropDownItems</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripItem</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">add_Click(System.EventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_AutoSize(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_BackColor(System.Drawing.Color)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_DisplayStyle(System.Windows.Forms.ToolStripItemDisplayStyle)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Image(System.Drawing.Image)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_ImageIndex(System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_ImageScaling(System.Windows.Forms.ToolStripItemImageScaling)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_ImageTransparentColor(System.Drawing.Color)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Name(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Size(System.Drawing.Size)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Text(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_ToolTipText(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripItemCollection</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">AddRange(System.Windows.Forms.ToolStripItem[])</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripItemDisplayStyle</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripItemImageScaling</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripMenuItem</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Checked(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_CheckState(System.Windows.Forms.CheckState)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripSeparator</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripSplitButton</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">add_ButtonClick(System.EventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Windows.Forms.ToolStripTextBox</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_BorderStyle(System.Windows.Forms.BorderStyle)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_ReadOnly(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_TextBoxTextAlign(System.Windows.Forms.HorizontalAlignment)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <a href="#Portability Summary">Back to Summary</a>
+                </p>
+        </div>
+    </div>
+</body>
+</html>

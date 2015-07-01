@@ -1,0 +1,1383 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+<head>
+    <meta content="en-us" http-equiv="Content-Language" />
+    <meta content="text/html; charset=utf-16" http-equiv="Content-Type" />
+    <title _locid="PortabilityAnalysis0">.NET Portability Report</title>
+    <style>
+        /* Body style, for the entire document */
+        body {
+            background: #F3F3F4;
+            color: #1E1E1F;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Header1 style, used for the main title */
+        h1 {
+            padding: 10px 0px 10px 10px;
+            font-size: 21pt;
+            background-color: #E2E2E2;
+            border-bottom: 1px #C1C1C2 solid;
+            color: #201F20;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        /* Header2 style, used for "Overview" and other sections */
+        h2 {
+            font-size: 18pt;
+            font-weight: normal;
+            padding: 15px 0 5px 0;
+            margin: 0;
+        }
+
+        /* Header3 style, used for sub-sections, such as project name */
+        h3 {
+            font-weight: normal;
+            font-size: 15pt;
+            margin: 0;
+            padding: 15px 0 5px 0;
+            background-color: transparent;
+        }
+
+        h4 {
+            font-weight: normal;
+            font-size: 12pt;
+            margin: 0;
+            padding: 0 0 0 0;
+            background-color: transparent;
+        }
+
+        /* Color all hyperlinks one color */
+        a {
+            color: #1382CE;
+        }
+
+        /* Paragraph text (for longer informational messages) */
+        p {
+            font-size: 10pt;
+        }
+
+        /* Table styles */
+        table {
+            border-spacing: 0 0;
+            border-collapse: collapse;
+            font-size: 10pt;
+        }
+
+            table th {
+                background: #E7E7E8;
+                text-align: left;
+                text-decoration: none;
+                font-weight: normal;
+                padding: 3px 6px 3px 6px;
+            }
+
+            table td {
+                vertical-align: top;
+                padding: 3px 6px 5px 5px;
+                margin: 0px;
+                border: 1px solid #E7E7E8;
+                background: #F7F7F8;
+            }
+
+        .NoBreakingChanges {
+            color: darkgreen;
+            font-weight:bold;
+        }
+
+        .FewBreakingChanges {
+            color: orange;
+            font-weight:bold;
+        }
+
+        .ManyBreakingChanges {
+            color: red;
+            font-weight:bold;
+        }
+
+        .BreakDetails {
+            margin-left: 30px;
+        }
+
+        .CompatMessage {
+            font-style: italic;
+            font-size: 10pt;
+        }
+
+        .GoodMessage {
+            color: darkgreen;
+        }
+
+        /* Local link is a style for hyperlinks that link to file:/// content, there are lots so color them as 'normal' text until the user mouse overs */
+        .localLink {
+            color: #1E1E1F;
+            background: #EEEEED;
+            text-decoration: none;
+        }
+
+            .localLink:hover {
+                color: #1382CE;
+                background: #FFFF99;
+                text-decoration: none;
+            }
+
+        /* Center text, used in the over views cells that contain message level counts */
+        .textCentered {
+            text-align: center;
+        }
+
+        /* The message cells in message tables should take up all avaliable space */
+        .messageCell {
+            width: 100%;
+        }
+
+        /* Padding around the content after the h1 */
+        #content {
+            padding: 0px 12px 12px 12px;
+        }
+
+        /* The overview table expands to width, with a max width of 97% */
+        #overview table {
+            width: auto;
+            max-width: 75%;
+        }
+
+        /* The messages tables are always 97% width */
+        #messages table {
+            width: 97%;
+        }
+
+        /* All Icons */
+        .IconSuccessEncoded, .IconInfoEncoded, .IconWarningEncoded, .IconErrorEncoded {
+            min-width: 18px;
+            min-height: 18px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* Success icon encoded */
+        .IconSuccessEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconSuccess#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPElEQVR4Xp1Tv0vDUBi8FqeA4NpBcBLcWnQSApncOnTo4FSnjP0DsnXpH5CxiwbHDg4Zuj4oOEXiJgiC4FDcCkLWmIMc1Pfw+eMgQ77v3Xf3Pe51YKGqqisAEwCR1TIAsiAIblSo6xrdHeJR85Xle3mdmCQKb0PsfqyxxzM8K15HZADl/H5+sHpZwYfxyRjTs+kWwKBx8yoHd2mRiuzF8mkJniWH/13u3Fjrs/EdhsdDFHGB/DLXEJBDLh1MWPAhPo1BLB4WX5yQywHR+m3tVe/t97D52CB/ziG0nIgD/qDuYg8WuCcVZ2YGwlJ3YDugkpR/VNcAEx6GEKhERSr71FuO4YCM4XBdwKvecjIlkSnsO0Hyp/GxSeJAdzBKzpOtnPwyyiPdAZhpZptT04tU+zk7s8czeges//s5C5+CwqrR4/gw+AAAAABJRU5ErkJggg==);
+        }
+
+        /* Information icon encoded */
+        .IconInfoEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconInformation#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVR4Xs2TsUoDQRRF7wwoziokjZUKadInhdhukR9YP8DMX1hYW+QvdsXa/QHBbcXC7W0CamWTQnclFutceIQJwwaWNLlwm5k5d94M76mmaeCrrmsLYOocY12FcxZFUeozCqKqqgYA8uevv1H6VuPxcwlfk5N92KHBxfFeCSAxxswlYAW/Xr989x/mv9gkhtyMDhcAxgzRsp7flj8B/HF1RsMXq+NZMkopaHe7lbKxQUEIGbKsYNoGn969060hZBkQex/W8oRQwsQaW2o3Ago2SVcJUzAgY3N0lTCZZm+zPS8HB51gMmS1DEYyOz9acKO1D8JWTlafKIMxdhvlfdyT94Vv5h7P8Ky7nQzACmhvKq3zk3PjW9asz9D/1oigecsioooAAAAASUVORK5CYII=);
+        }
+
+        /* Warning icon encoded */
+        .IconWarningEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconWarning#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAx0lEQVR4XpWSMQ7CMAxFf4xAyBMLCxMrO8dhaBcuwdCJS3RJBw7SA/QGTCxdWJgiQYWKXJWKIXHIlyw5lqr34tQgEOdcBsCOx5yZK3hCCKdYXneQkh4pEfqzLfu+wVDSyyzFoJjfz9NB+pAF+eizx2Vruts0k15mPgvS6GYvpVtQhB61IB/dk6AF6fS4Ben0uIX5odtFe8Q/eW1KvFeH4e8khT6+gm5B+t3juyDt7n0jpe+CANTd+oTUjN/U3yVaABnSUjFz/gFq44JaVSCXeQAAAABJRU5ErkJggg==);
+        }
+
+        /* Error icon encoded */
+        .IconErrorEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconError#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQElEQVR4XqWTvUoEQRCE6wYPZUA80AfwAQz23uCMjA7MDRQEIzPBVEyNTQUFIw00vcQTTMzuAh/AxEQQT8HF/3G/oGGnEUGuoNnd6qoZuqltyKEsyzVJq5I6rnUp6SjGeGhESikzzlc1eL7opfuVbrqbU1Zw9NCgtQMaZpY0eNnaaL2fHusvTK5vKu7sjSS1Y4y3QUA6K3e3Mau5UFDyMP7tYF9o8cAHZv68vipoIJg971PZIZ5HiwdvYGGvFVFHmGmZ2MxwmQYPXubPl9Up0tfoMQGetXd6mRbvhBw+boZ6WF7Mbv1+GsHRk0fQmPAH1GfmZirbCfDJ61tw3Px8/8pZsPAG4jlVhcPgZ7adwNWBB68lkRQWFiTgFlbnLY3DGGM7izIJIyT/jjIvEJw6fdJTc6krDzh6aMwMP9bvDH4ADSsa9uSWVJkAAAAASUVORK5CYII=);
+        }
+    </style>
+</head>
+<body>
+    <h1 _locid="PortabilityReport">.NET Portability Report</h1>
+    <div id="content">
+        <div id="submissionId" style="font-size:8pt;">
+            <p>
+                <i>
+                    Submission Id&nbsp;
+                    acce63f4-240c-4d64-a47b-6dccec8208a7
+
+                    
+                    
+                </i>
+            </p>
+        </div>
+        <h2 _locid="SummaryTitle">
+            <a name="Portability Summary"></a>Portability Summary
+        </h2>
+        <div id="summary">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Assembly</th>
+                            <th>ASP.NET 5,Version=v1.0</th>
+                            <th>Windows,Version=v8.1</th>
+                            <th>.NET Framework,Version=v4.6</th>
+                            <th>Windows Phone,Version=v8.1</th>
+                    </tr>
+
+                    
+                        <tr>
+                            <td><strong><a href="#Labo.Common.Data.EntityFramework.NET4">Labo.Common.Data.EntityFramework.NET4</a></strong></td>
+                                <td class="text-center">75.85 %</td>
+                                <td class="text-center">74.92 %</td>
+                                <td class="text-center">100.00 %</td>
+                                <td class="text-center">74.92 %</td>
+                        </tr>
+                                    </tbody>
+            </table>
+        </div>
+        <div id="details">
+                <a name="Labo.Common.Data.EntityFramework.NET4"><h3>Labo.Common.Data.EntityFramework.NET4</h3></a>
+                <table>
+                    <tbody>
+                        <tr>
+                                <th>Target type</th>
+                                <th>ASP.NET 5,Version=v1.0</th>
+                                <th>Windows,Version=v8.1</th>
+                                <th>.NET Framework,Version=v4.6</th>
+                                <th>Windows Phone,Version=v8.1</th>
+                                <th>Recommended changes</th>
+                        </tr>
+                        
+                            <tr>
+                                    <td>System.Data.Common.DbConnection</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.EntityKey</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.EntityState</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.IDbConnection</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.IDbTransaction</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.IsolationLevel</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.DataSpace</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.EdmMember</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Name</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.EdmProperty</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.EdmType</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_BaseType</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Name</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.EntityContainer</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_BaseEntitySets</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.EntitySet</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_ElementType</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.EntitySetBase</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_ElementType</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Name</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.EntityType</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.EntityTypeBase</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_KeyMembers</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.GlobalItem</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.ItemCollection</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.MetadataItem</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_MetadataProperties</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.MetadataProperty</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Value</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.MetadataWorkspace</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetItemCollection(System.Data.Metadata.Edm.DataSpace)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetItems``1(System.Data.Metadata.Edm.DataSpace)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">LoadFromAssembly(System.Reflection.Assembly)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TryGetEdmSpaceType(System.Data.Metadata.Edm.StructuralType,System.Data.Metadata.Edm.StructuralType@)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.ObjectItemCollection</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TryGetClrType(System.Data.Metadata.Edm.StructuralType,System.Type@)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.ReadOnlyMetadataCollection`1</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TryGetValue(System.String,System.Boolean,`0@)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Metadata.Edm.StructuralType</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Objects.DataClasses.IEntityWithKey</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Objects.ObjectContext</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Attach(System.Data.Objects.DataClasses.IEntityWithKey)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">AttachTo(System.String,System.Object)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">CreateEntityKey(System.String,System.Object)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">CreateObjectSet``1</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Detach(System.Object)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ExecuteStoreCommand(System.String,System.Object[])</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Connection</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_ContextOptions</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_MetadataWorkspace</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_ObjectStateManager</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">SaveChanges</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Objects.ObjectContextOptions</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_LazyLoadingEnabled(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_ProxyCreationEnabled(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Objects.ObjectQuery</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Context</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Objects.ObjectSet`1</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">AddObject(`0)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Attach(`0)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">DeleteObject(`0)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Detach(`0)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_EntitySet</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Objects.ObjectStateEntry</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Entity</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_State</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">SetModifiedProperty(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Objects.ObjectStateManager</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ChangeObjectState(System.Object,System.Data.EntityState)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetObjectStateEntry(System.Object)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TryGetObjectStateEntry(System.Data.EntityKey,System.Data.Objects.ObjectStateEntry@)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">TryGetObjectStateEntry(System.Object,System.Data.Objects.ObjectStateEntry@)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Exception</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Remove.  Ctor overload taking SerializationInfo is not applicable in new surface area</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Remove.  Ctor overload taking SerializationInfo is not applicable in new surface area</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Reflection.BindingFlags</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Runtime.Serialization.SerializationInfo</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Remove serialization constructors on custom Exception types</td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.SecurityRulesAttribute</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>There is only one security transparency model on non-desktop SKUs, so there&#39;s nothing to do with this attribute.  It should just be removed from non-desktop-fwk assemblies.</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Security.SecurityRuleSet)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>There is only one security transparency model on non-desktop SKUs, so there&#39;s nothing to do with this attribute.  It should just be removed from non-desktop-fwk assemblies.</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.SecurityRuleSet</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Remove usage</td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.SerializableAttribute</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Remove this attribute</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Remove this attribute</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Type</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>.GetTypeInfo().Assembly</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Assembly</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>.GetTypeInfo().Assembly</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <a href="#Portability Summary">Back to Summary</a>
+                </p>
+        </div>
+    </div>
+</body>
+</html>

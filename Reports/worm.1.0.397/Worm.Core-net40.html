@@ -1,0 +1,2297 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+<head>
+    <meta content="en-us" http-equiv="Content-Language" />
+    <meta content="text/html; charset=utf-16" http-equiv="Content-Type" />
+    <title _locid="PortabilityAnalysis0">.NET Portability Report</title>
+    <style>
+        /* Body style, for the entire document */
+        body {
+            background: #F3F3F4;
+            color: #1E1E1F;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Header1 style, used for the main title */
+        h1 {
+            padding: 10px 0px 10px 10px;
+            font-size: 21pt;
+            background-color: #E2E2E2;
+            border-bottom: 1px #C1C1C2 solid;
+            color: #201F20;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        /* Header2 style, used for "Overview" and other sections */
+        h2 {
+            font-size: 18pt;
+            font-weight: normal;
+            padding: 15px 0 5px 0;
+            margin: 0;
+        }
+
+        /* Header3 style, used for sub-sections, such as project name */
+        h3 {
+            font-weight: normal;
+            font-size: 15pt;
+            margin: 0;
+            padding: 15px 0 5px 0;
+            background-color: transparent;
+        }
+
+        h4 {
+            font-weight: normal;
+            font-size: 12pt;
+            margin: 0;
+            padding: 0 0 0 0;
+            background-color: transparent;
+        }
+
+        /* Color all hyperlinks one color */
+        a {
+            color: #1382CE;
+        }
+
+        /* Paragraph text (for longer informational messages) */
+        p {
+            font-size: 10pt;
+        }
+
+        /* Table styles */
+        table {
+            border-spacing: 0 0;
+            border-collapse: collapse;
+            font-size: 10pt;
+        }
+
+            table th {
+                background: #E7E7E8;
+                text-align: left;
+                text-decoration: none;
+                font-weight: normal;
+                padding: 3px 6px 3px 6px;
+            }
+
+            table td {
+                vertical-align: top;
+                padding: 3px 6px 5px 5px;
+                margin: 0px;
+                border: 1px solid #E7E7E8;
+                background: #F7F7F8;
+            }
+
+        .NoBreakingChanges {
+            color: darkgreen;
+            font-weight:bold;
+        }
+
+        .FewBreakingChanges {
+            color: orange;
+            font-weight:bold;
+        }
+
+        .ManyBreakingChanges {
+            color: red;
+            font-weight:bold;
+        }
+
+        .BreakDetails {
+            margin-left: 30px;
+        }
+
+        .CompatMessage {
+            font-style: italic;
+            font-size: 10pt;
+        }
+
+        .GoodMessage {
+            color: darkgreen;
+        }
+
+        /* Local link is a style for hyperlinks that link to file:/// content, there are lots so color them as 'normal' text until the user mouse overs */
+        .localLink {
+            color: #1E1E1F;
+            background: #EEEEED;
+            text-decoration: none;
+        }
+
+            .localLink:hover {
+                color: #1382CE;
+                background: #FFFF99;
+                text-decoration: none;
+            }
+
+        /* Center text, used in the over views cells that contain message level counts */
+        .textCentered {
+            text-align: center;
+        }
+
+        /* The message cells in message tables should take up all avaliable space */
+        .messageCell {
+            width: 100%;
+        }
+
+        /* Padding around the content after the h1 */
+        #content {
+            padding: 0px 12px 12px 12px;
+        }
+
+        /* The overview table expands to width, with a max width of 97% */
+        #overview table {
+            width: auto;
+            max-width: 75%;
+        }
+
+        /* The messages tables are always 97% width */
+        #messages table {
+            width: 97%;
+        }
+
+        /* All Icons */
+        .IconSuccessEncoded, .IconInfoEncoded, .IconWarningEncoded, .IconErrorEncoded {
+            min-width: 18px;
+            min-height: 18px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* Success icon encoded */
+        .IconSuccessEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconSuccess#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPElEQVR4Xp1Tv0vDUBi8FqeA4NpBcBLcWnQSApncOnTo4FSnjP0DsnXpH5CxiwbHDg4Zuj4oOEXiJgiC4FDcCkLWmIMc1Pfw+eMgQ77v3Xf3Pe51YKGqqisAEwCR1TIAsiAIblSo6xrdHeJR85Xle3mdmCQKb0PsfqyxxzM8K15HZADl/H5+sHpZwYfxyRjTs+kWwKBx8yoHd2mRiuzF8mkJniWH/13u3Fjrs/EdhsdDFHGB/DLXEJBDLh1MWPAhPo1BLB4WX5yQywHR+m3tVe/t97D52CB/ziG0nIgD/qDuYg8WuCcVZ2YGwlJ3YDugkpR/VNcAEx6GEKhERSr71FuO4YCM4XBdwKvecjIlkSnsO0Hyp/GxSeJAdzBKzpOtnPwyyiPdAZhpZptT04tU+zk7s8czeges//s5C5+CwqrR4/gw+AAAAABJRU5ErkJggg==);
+        }
+
+        /* Information icon encoded */
+        .IconInfoEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconInformation#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVR4Xs2TsUoDQRRF7wwoziokjZUKadInhdhukR9YP8DMX1hYW+QvdsXa/QHBbcXC7W0CamWTQnclFutceIQJwwaWNLlwm5k5d94M76mmaeCrrmsLYOocY12FcxZFUeozCqKqqgYA8uevv1H6VuPxcwlfk5N92KHBxfFeCSAxxswlYAW/Xr989x/mv9gkhtyMDhcAxgzRsp7flj8B/HF1RsMXq+NZMkopaHe7lbKxQUEIGbKsYNoGn969060hZBkQex/W8oRQwsQaW2o3Ago2SVcJUzAgY3N0lTCZZm+zPS8HB51gMmS1DEYyOz9acKO1D8JWTlafKIMxdhvlfdyT94Vv5h7P8Ky7nQzACmhvKq3zk3PjW9asz9D/1oigecsioooAAAAASUVORK5CYII=);
+        }
+
+        /* Warning icon encoded */
+        .IconWarningEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconWarning#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAx0lEQVR4XpWSMQ7CMAxFf4xAyBMLCxMrO8dhaBcuwdCJS3RJBw7SA/QGTCxdWJgiQYWKXJWKIXHIlyw5lqr34tQgEOdcBsCOx5yZK3hCCKdYXneQkh4pEfqzLfu+wVDSyyzFoJjfz9NB+pAF+eizx2Vruts0k15mPgvS6GYvpVtQhB61IB/dk6AF6fS4Ben0uIX5odtFe8Q/eW1KvFeH4e8khT6+gm5B+t3juyDt7n0jpe+CANTd+oTUjN/U3yVaABnSUjFz/gFq44JaVSCXeQAAAABJRU5ErkJggg==);
+        }
+
+        /* Error icon encoded */
+        .IconErrorEncoded {
+            /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+            /* [---XsltValidateInternal-Base64EncodedImage:IconError#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQElEQVR4XqWTvUoEQRCE6wYPZUA80AfwAQz23uCMjA7MDRQEIzPBVEyNTQUFIw00vcQTTMzuAh/AxEQQT8HF/3G/oGGnEUGuoNnd6qoZuqltyKEsyzVJq5I6rnUp6SjGeGhESikzzlc1eL7opfuVbrqbU1Zw9NCgtQMaZpY0eNnaaL2fHusvTK5vKu7sjSS1Y4y3QUA6K3e3Mau5UFDyMP7tYF9o8cAHZv68vipoIJg971PZIZ5HiwdvYGGvFVFHmGmZ2MxwmQYPXubPl9Up0tfoMQGetXd6mRbvhBw+boZ6WF7Mbv1+GsHRk0fQmPAH1GfmZirbCfDJ61tw3Px8/8pZsPAG4jlVhcPgZ7adwNWBB68lkRQWFiTgFlbnLY3DGGM7izIJIyT/jjIvEJw6fdJTc6krDzh6aMwMP9bvDH4ADSsa9uSWVJkAAAAASUVORK5CYII=);
+        }
+    </style>
+</head>
+<body>
+    <h1 _locid="PortabilityReport">.NET Portability Report</h1>
+    <div id="content">
+        <div id="submissionId" style="font-size:8pt;">
+            <p>
+                <i>
+                    Submission Id&nbsp;
+                    faf3fb3c-eebd-4159-85be-3858f58553f1
+
+                    
+                    
+                </i>
+            </p>
+        </div>
+        <h2 _locid="SummaryTitle">
+            <a name="Portability Summary"></a>Portability Summary
+        </h2>
+        <div id="summary">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Assembly</th>
+                            <th>ASP.NET 5,Version=v1.0</th>
+                            <th>Windows,Version=v8.1</th>
+                            <th>.NET Framework,Version=v4.6</th>
+                            <th>Windows Phone,Version=v8.1</th>
+                    </tr>
+
+                    
+                        <tr>
+                            <td><strong><a href="#Worm.Core">Worm.Core</a></strong></td>
+                                <td class="text-center">94.09 %</td>
+                                <td class="text-center">87.51 %</td>
+                                <td class="text-center">100.00 %</td>
+                                <td class="text-center">87.34 %</td>
+                        </tr>
+                                    </tbody>
+            </table>
+        </div>
+        <div id="details">
+                <a name="Worm.Core"><h3>Worm.Core</h3></a>
+                <table>
+                    <tbody>
+                        <tr>
+                                <th>Target type</th>
+                                <th>ASP.NET 5,Version=v1.0</th>
+                                <th>Windows,Version=v8.1</th>
+                                <th>.NET Framework,Version=v4.6</th>
+                                <th>Windows Phone,Version=v8.1</th>
+                                <th>Recommended changes</th>
+                        </tr>
+                        
+                            <tr>
+                                    <td>System.AppDomain</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use object with finalizer stored in static variable, or use app-model specific unload notifications (e.g. Application.Suspending event for modern apps)</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">add_AssemblyResolve(System.ResolveEventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Remove usage</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">add_ProcessExit(System.EventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use object with finalizer stored in static variable, or use app-model specific unload notifications (e.g. Application.Suspending event for modern apps)</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_BaseDirectory</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Currently there is no workaround, but we are working on it. Please check back.</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_CurrentDomain</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Remove usage</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetAssemblies</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Remove usage</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">remove_AssemblyResolve(System.ResolveEventHandler)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Remove usage</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Array</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ForEach``1(``0[],System.Action{``0})</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Attribute</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetCustomAttribute(System.Reflection.MemberInfo,System.Type)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.CodeDom.Compiler.CodeDomProvider</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">CompileAssemblyFromSource(System.CodeDom.Compiler.CompilerParameters,System.String[])</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">CreateProvider(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.CodeDom.Compiler.CompilerErrorCollection</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_HasErrors</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.CodeDom.Compiler.CompilerParameters</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_ReferencedAssemblies</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_TempFiles</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_GenerateInMemory(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_IncludeDebugInformation(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.CodeDom.Compiler.CompilerResults</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_CompiledAssembly</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Errors</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.CodeDom.Compiler.TempFileCollection</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_KeepFiles(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Collections.CollectionBase</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetEnumerator</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Collections.Specialized.StringCollection</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Add(System.String)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ComponentModel.DataAnnotations.DisplayAttribute</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetName</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ComponentModel.DescriptionAttribute</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Description</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ComponentModel.InvalidEnumArgumentException</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ComponentModel.ITypeDescriptorContext</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Currently there is no workaround, but we are working on it. Please check back.</td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ComponentModel.TypeConverter</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ConvertFrom(System.Object)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ConvertTo(System.Object,System.Type)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.CommandBehavior</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Common.DbCommand</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ExecuteNonQuery</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ExecuteReader(System.Data.CommandBehavior)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ExecuteScalar</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Parameters</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Common.DbConnection</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_State</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Open</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Common.DbDataReader</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Close</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Dispose</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_IsClosed</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Item(System.Int32)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Item(System.String)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Read</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Common.DbParameter</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.Common.DbParameterCollection</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Add(System.Object)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.ConnectionState</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.DataTable</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Load(System.Data.IDataReader)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.DbType</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Data.IDataReader</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.DBNull</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Value</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Diagnostics.StackFrame</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetMethod</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Diagnostics.StackTrace</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Currently there is no workaround, but we are working on it. Please check back.</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetFrame(System.Int32)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Diagnostics.Trace</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">WriteLine(System.Object)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Exception</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_TargetSite</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ICloneable</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Remove usage.  Implement cloning operation yourself if needed.</td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.IO.Directory</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetFiles(System.String,System.String,System.IO.SearchOption)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.IO.SearchOption</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Reflection.Assembly</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use Assembly.DefinedTypes</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_CodeBase</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_GlobalAssemblyCache</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Location</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Remove usage</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetTypes</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use Assembly.DefinedTypes</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">LoadFile(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">LoadFrom(System.String)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use AssemblyLoadContext</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Reflection.Binder</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use an overload that does not take a Binder.</td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Reflection.BindingFlags</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Reflection.MemberInfo</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use Microsoft.BCL.Metadata package or remove usage</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_MemberType</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>use &quot;is FieldInfo&quot;, &quot;is PropertyInfo&quot;, etc</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_MetadataToken</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use Microsoft.BCL.Metadata package or remove usage</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_ReflectedType</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Remove usage:  Use reference to object being reflected on to get this value instead.</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Reflection.MemberTypes</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use is operator.  Example:  if (membertype == membertypes.Field) --&gt; if (member is FieldInfo)</td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Reflection.ParameterModifier</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use an overload that does not take a ParameterModifier array.</td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Reflection.PropertyInfo</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use PropertyInfo.SetMethod property</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetGetMethod(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use PropertyInfo.GetMethod property</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetSetMethod(System.Boolean)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use PropertyInfo.SetMethod property</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ResolveEventArgs</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use AssemblyLoadContext</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Name</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use AssemblyLoadContext</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.ResolveEventHandler</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use AssemblyLoadContext</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Object,System.IntPtr)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use AssemblyLoadContext</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.CryptoStream</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.IO.Stream,System.Security.Cryptography.ICryptoTransform,System.Security.Cryptography.CryptoStreamMode)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">FlushFinalBlock</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.CryptoStreamMode</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.HashAlgorithm</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">ComputeHash(System.Byte[])</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.ICryptoTransform</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.RijndaelManaged</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.SHA1</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Create</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Security.Cryptography.SymmetricAlgorithm</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">CreateDecryptor(System.Byte[],System.Byte[])</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">CreateEncryptor(System.Byte[],System.Byte[])</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Text.Encoding</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Call Encoding.GetString(byte[], int, int)</td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Default</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use GetEncoding(0)</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetString(System.Byte[])</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Call Encoding.GetString(byte[], int, int)</td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Threading.Thread</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Threading.ThreadStart)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_CurrentThread</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_ManagedThreadId</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_IsBackground(System.Boolean)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Name(System.String)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">set_Priority(System.Threading.ThreadPriority)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Change code to not depend on thread priorities for functionality.  Portable code must run on platforms that do not support changing thread priorities.</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Sleep(System.Int32)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">Start</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Threading.ThreadPriority</td>
+
+                                        <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Change code to not depend on thread priorities for functionality.  Portable code must run on platforms that do not support changing thread priorities.</td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Threading.ThreadStart</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">#ctor(System.Object,System.IntPtr)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.Type</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td></td>
+                            </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_Assembly</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>.GetTypeInfo().Assembly</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_BaseType</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>.GetTypeInfo().BaseType</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_IsAbstract</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>.GetTypeInfo().IsAbstract</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_IsEnum</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>.GetTypeInfo().IsEnum</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_IsGenericType</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>.GetTypeInfo().IsGenericType</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_IsInterface</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>.GetTypeInfo().IsInterface</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_IsValueType</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>.GetTypeInfo().IsValueType</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">get_UnderlyingSystemType</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetField(System.String)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetFields(System.Reflection.BindingFlags)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetGenericArguments</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetInterfaces</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetMember(System.String,System.Reflection.BindingFlags)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetMembers(System.Reflection.BindingFlags)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetMethod(System.String)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetMethod(System.String,System.Reflection.BindingFlags)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Equivalent available: Add using for System.Reflection, and reference System.Reflection.TypeExtensions </td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetMethod(System.String,System.Reflection.BindingFlags,System.Reflection.Binder,System.Type[],System.Reflection.ParameterModifier[])</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use GetMethod(string, Type[]) to search for public methods by name and parameter type or filter the results of GetMethods(BindingFlags) using LINQ for other queries.</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetMethod(System.String,System.Type[])</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetMethods(System.Reflection.BindingFlags)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetProperties</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetProperties(System.Reflection.BindingFlags)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetProperty(System.String)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetProperty(System.String,System.Reflection.BindingFlags)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">GetTypeCode(System.Type)</td>
+
+                                            <td class="IconErrorEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td>Use Type or RuntimeTypeHandle instead.</td>
+                                </tr>
+                                <tr>
+                                        <td style="padding-left:2em">IsAssignableFrom(System.Type)</td>
+
+                                            <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                    <td></td>
+                                </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                    <td>System.TypeCode</td>
+
+                                        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+        <td class="IconSuccessEncoded"></td>
+        <td class="IconErrorEncoded"></td>
+
+                                <td>Use Type or RuntimeTypeHandle instead.</td>
+                            </tr>
+                            <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                            </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <a href="#Portability Summary">Back to Summary</a>
+                </p>
+        </div>
+    </div>
+</body>
+</html>
